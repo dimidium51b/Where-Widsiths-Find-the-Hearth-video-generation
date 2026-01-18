@@ -12,8 +12,8 @@ from src.logging_setup import setup_logging
 LOG_FILE = setup_logging()
 logger = logging.getLogger(__name__)
 
-#SEGMENT_LENGTH = 10 * 60  # 10 minutes default
-SEGMENT_LENGTH = 64 * 60  # 10 minutes default
+SEGMENT_LENGTH = 10 * 60  # 10 minutes default
+#SEGMENT_LENGTH = 64 * 60  # 10 minutes default
 
 
 
@@ -64,24 +64,3 @@ if __name__ == "__main__":
         render_chunk(s, e, i, events, events)
 
     logger.info("Done - see generated media files in Manim's output folders")
-if __name__ == "__main__":
-    dna = MusicDNA("Dimidiums_Orbit_1.mid", "Dimidiums_Orbit_1_v2.wav")
-    events = dna.get_midi_events()
-    duration = dna.get_duration()
-
-    # Export audit payload for 'No AI' provenance
-    try:
-        fp = dna.save_audit('audit_events.json')
-        print(f"Audit written: audit_events.json (fingerprint: {fp})")
-    except Exception as exc:
-        print("Warning: failed to write audit file:", exc)
-
-    num_chunks = math.ceil(duration / SEGMENT_LENGTH) if duration > 0 else 0
-
-    for i in range(num_chunks):
-        s = i * SEGMENT_LENGTH
-        e = min(duration, (i + 1) * SEGMENT_LENGTH)
-        print(f"Rendering chunk {i}: {s:.1f}s -> {e:.1f}s")
-        render_chunk(s, e, i, events, events)
-
-    print("Done - see generated media files in Manim's output folders")
